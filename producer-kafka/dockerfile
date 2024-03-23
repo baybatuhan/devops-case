@@ -1,0 +1,17 @@
+FROM openjdk:17-jdk-alpine
+
+WORKDIR /app
+
+COPY root/kafka-producer-consumer/kafka-producer/pom.xml ./
+
+RUN mvn -f kafka-producer-consumer/kafka-producer/pom.xml clean install
+
+COPY root/kafka-producer-consumer/kafka-producer/target/kafka-producer-*.jar ./
+
+COPY root/kafka-producer-consumer/kafka-producer/producer.java ./
+
+CMD ["java", "-jar", "kafka-producer-*.jar"]
+
+ENV KAFKA_BROKERS="localhost:9092"
+
+EXPOSE 9092

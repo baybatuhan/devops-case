@@ -1,0 +1,24 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: producer
+spec:
+  containers:
+  - name: producer
+    image: kafka-producer:latest  # Değiştirin
+    ports:
+    - containerPort: 9092
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: producer
+spec:
+  type: NodePort  # Dış erişim için NodePort kullanıyoruz
+  selector:
+    app: my-kafka-app
+  ports:
+  - name: http
+    protocol: TCP
+    port: 9092
+    targetPort: 9092
