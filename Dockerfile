@@ -1,20 +1,26 @@
-FROM maven:3.8-openjdk-alpine AS builder
+FROM openjdk:17-jdk-alpine
 
 WORKDIR /app
 
-COPY pom.xml ./
-COPY KafkaProducerExample.java ./
+COPY kafka-producer-consumer/kafka-producer/pom.xml ./
 
-RUN mvn package
+RUN mvn -f kafka-producer-consumer/kafka-producer/pom.xml clean install
 
-FROM openjdk:17-alpine
+COPY kafka-producer-consumer/kafka-producer/target/kafka-producer-*.jar ./
 
-WORKDIR /app
+COPY kafka-producer-consumer/kafka-consumer/pom.xml ./
 
-COPY --from=builder /app/target/*.jar ./
+RUN mvn -f kafka-producer-consumer/kafka-consumer/pom.xml clean install
 
-EXPOSE 8080
+COPY kafka-producer-consumer/kafka-producer/target/kafka-consumer-*.jar ./
 
-CMD ["java", "-jar", "kafka-producer-1.0-SNAPSHOT.jar"]
+COPY kafka-producer-consumer/kafka-producer/src/main/java/producer.java ./
 
+COPY kafka-producer-consumer/kafka-consumer/src/main/java/consumer.java ./
+
+CMD ["java", "-jar", "kafka-producer-*.jar", "kafka-consumer-*.jar"]
+
+ENV KAFKA_BROKERS="localhost:9092"
+
+EXPOSE 9092
 

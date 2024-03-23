@@ -1,0 +1,16 @@
+apiVersion: kafka.strimzi.io/v1beta2
+kind: Kafka
+metadata:
+  name: my-kafka
+spec:
+  kafka:
+    replicas: 1
+    listeners:
+      - name: plain
+        port: 9092
+      - name: external
+        type: external
+        port: 9094
+        bootstrapServers: "my-kafka-external:9094"  # Değiştirin (external listener için)
+  zookeeper:
+    replicas: 1
