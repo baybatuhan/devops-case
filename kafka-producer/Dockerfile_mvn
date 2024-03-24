@@ -1,0 +1,16 @@
+FROM openjdk:17-jdk-alpine
+
+# Install Maven
+RUN apk add --no-cache curl tar bash
+ENV MAVEN_HOME /usr/lib/mvn
+ENV MAVEN_VERSION 3.8.4
+
+RUN mkdir -p /usr/lib/mvn \
+    && curl -fsSL https://apache.osuosl.org/maven/maven-3/$MAVEN_VERSION/binaries/apache-maven-$MAVEN_VERSION-bin.tar.gz \
+    | tar -xzC /usr/lib/mvn --strip-components=1 \
+    && ln -s /usr/lib/mvn/bin/mvn /usr/bin/mvn
+
+# Verify Maven installation
+RUN mvn --version
+
+# Your further Dockerfile commands...

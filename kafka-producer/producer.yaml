@@ -5,7 +5,8 @@ metadata:
 spec:
   containers:
   - name: producer
-    image: kafka-producer:latest  # Değiştirin
+    image: kafka-producer-v2:latest  # Değiştirin
+    imagePullPolicy: Never
     ports:
     - containerPort: 9092
 ---
